@@ -21,7 +21,8 @@ class ImdbSpider(scrapy.Spider):
     
     def parse_actor_page(self, response):
         actor_name = response.css("h1.header").css("span.itemprop::text").get()
-        for a in response.css("div.filmo-row b").css("a::text"):
+        movie_or_TV_list = set([a for a in response.css("div.filmo-row b").css("a::text")])
+        for a in movie_or_TV_list:
             movie_or_TV_name = a.get()
             yield {"actor" : actor_name, "movie_or_TV_name" : movie_or_TV_name}
 

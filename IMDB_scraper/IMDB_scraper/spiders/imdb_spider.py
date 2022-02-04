@@ -11,14 +11,13 @@ class ImdbSpider(scrapy.Spider):
 
     def parse(self,response):
         full_credits = response.urljoin("fullcredits")
-        if full_credits:
-            yield scarpy.Request(full_credits, callback = self.parse_full_credits)
+        yield scrapy.Request(full_credits, callback = self.parse_full_credits)
     
     def parse_full_credits(self,response):
         actor_pages = [a.attrib["href"] for a in response.css("td.primary_photo a")]
         for page in actor_pages:
             actcor_page = response.urljoin(page)
-            yield scarpy.Request(actcor_page, callback = self.parse_actor_page)
+            yield scrapy.Request(actcor_page, callback = self.parse_actor_page)
     
     def parse_actor_page(self, response):
         actor_name = response.css("h1.header").css("span.itemprop::text").get()
